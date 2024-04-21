@@ -16,22 +16,25 @@ client = influxdb_client.InfluxDBClient(
 query_api = client.query_api()
 
 query = 'from(bucket:"sensors")\
-|> range(start: -1h)\
+|> range(start: -30d)\
 |> filter(fn:(r) => r._measurement == "sensors")\
 |> filter(fn:(r) => r.location == "Prague")\
 |> filter(fn:(r) => r._field == "temperature")'
 
 result = query_api.query(org=org, query=query)
-results = []
+sensors = {'temperature':[]}
 for table in result:
     for record in table.records:
-        results.append((record.get_field(), record.get_value(), record.get_time()))
+        sensors['temperature'].append((record.get_time(), record.get_value()))
 
-print(results)
-print(result)
-print(result[0].records)
-print(result[0].records[0].values)
-print(result[0].records[0])
+for i in sensors['temperature']:
+    print(i[0], i[1])
+# print(results)
+# print(result)
+# print(result[0].records)
+# print(result[0].records[0].values)
+# utc_time = result[0].records[0].get_time()
+# print(utc_time)
 
 # The Flux object provides the following methods for accessing your data:
 

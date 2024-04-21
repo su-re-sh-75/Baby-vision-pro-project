@@ -14,6 +14,6 @@ client = influxdb_client.InfluxDBClient(
 
 write_api = client.write_api(write_options=SYNCHRONOUS)
 for i in range(10):
-    p = influxdb_client.Point("sensors").tag("location", "Prague").field("temperature", (25.3 + i) * (i + 1))
+    p = influxdb_client.Point("sensors").field("temperature", (25.3 + i) * (i + 1))
     write_api.write(bucket=bucket, org=org, record=p)
     time.sleep(10)
